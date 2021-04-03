@@ -7,7 +7,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    link(url: String): Link
+    link(id: Int!): Link
     allLinks: [Link]
   }
 `;
