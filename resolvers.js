@@ -15,11 +15,36 @@ const resolvers = {
       const newUrl = slug
         ? `http://localhost:4000/${slug}`
         : `http://localhost:4000/${randomSlug}`;
+      let retries = 0;
 
-      return models.Link.create({
-        slug,
-        url: newUrl
-      });
+      try {
+        return await models.Link.create({
+          slug,
+          url: newUrl
+        });
+      } catch (e) {
+        if (e.errors[0].message === "url must be unique" && retries < 4) {
+          retries++;
+
+          return models.Link.create({
+            slug,
+            url: `http://localhost:4000/${randomSlug}`
+          });
+        } else if (
+          e.errors[0].message === "slug must be unique" &&
+          retries < 4
+        ) {
+          retries++;
+
+          const updatedUserSlug = `${slug}_${randomSlug}`;
+          return models.Link.create({
+            slug: updatedUserSlug,
+            url: `http://localhost:4000/${updatedUserSlug}`
+          });
+        } else {
+          throw e;
+        }
+      }
     }
   }
 };
