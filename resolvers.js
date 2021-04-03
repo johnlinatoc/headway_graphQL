@@ -6,6 +6,14 @@ const resolvers = {
     async allLinks(root, args, { models }) {
       return models.Link.findAll();
     }
+  },
+  Mutation: {
+    async createLink(root, { url, slug }, { models }) {
+      return models.Link.create({
+        slug,
+        url
+      });
+    }
   }
 };
 

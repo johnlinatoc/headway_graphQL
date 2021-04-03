@@ -10,6 +10,10 @@ const typeDefs = gql`
     link(id: Int!): Link
     allLinks: [Link]
   }
+
+  type Mutation {
+    createLink(slug: String, url: String): Link
+  }
 `;
 
 module.exports = typeDefs;
