@@ -1,3 +1,5 @@
+const RandExp = require("randexp");
+
 const resolvers = {
   Query: {
     async link(root, { id }, { models }) {
@@ -9,9 +11,14 @@ const resolvers = {
   },
   Mutation: {
     async createLink(root, { url, slug }, { models }) {
+      const randomSlug = new RandExp(/^[0-9A-Z]{4}$/).gen();
+      const newUrl = slug
+        ? `http://localhost:4000/${slug}`
+        : `http://localhost:4000/${randomSlug}`;
+
       return models.Link.create({
         slug,
-        url
+        url: newUrl
       });
     }
   }
